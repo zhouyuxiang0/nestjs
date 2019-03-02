@@ -1,16 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, HttpException, HttpStatus, UseFilters, UsePipes } from '@nestjs/common';
 
 import { CreateCatDto } from './create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
 import { ForbiddenException } from 'src/Forbidden/forbidden.exception';
 import { HttpExceptionFilter } from 'src/exception/HTTP-exception.filter';
+import { ValidationPipe } from './pipe/validation.pipe';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   async create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
